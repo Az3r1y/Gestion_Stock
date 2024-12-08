@@ -1,0 +1,33 @@
+
+
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: gestion-stock-backend
+    container_name: gestion_stock_backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ConnectionStrings__DefaultConnection=Server=db;Database=gestion_stock;User=sa;Password=Password123!
+    ports:
+      - "5000:80"
+    depends_on:
+      - db
+    networks:
+      - gestion_stock_network
+
+  db:
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    container_name: gestion_stock_db
+    environment:
+      - SA_PASSWORD=Password123!
+      - ACCEPT_EULA=Y
+    ports:
+      - "1433:1433"
+    networks:
+      - gestion_stock_network
+
+networks:
+  gestion_stock_network:
+    driver: bridge
